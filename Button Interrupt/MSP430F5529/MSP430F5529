@@ -1,0 +1,27 @@
+#include <msp430.h>
+/**
+ * main.c
+ */
+
+int main(void)
+{
+
+    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+
+    P1DIR = BIT0;   // sets P1.0 as an output
+    P1REN = BIT1;   // enables resistor at P1.1 (pull up)
+    P1OUT = BIT1;   // sets value of P1.1
+    P1IE |= BIT1;   // enables interrupt for when button is pressed
+    P1IFG &= ~BIT1; // clear interrupts
+
+    __enable_interrupt();
+}
+
+#pragma vector=PORT1_VECTOR
+
+__interrupt void Port_1(void)
+
+{
+    P1OUT ^= BIT0;  // toggles LED
+    P1IFG &= ~BIT1; // interrupts toggle so button holds current state
+}
