@@ -11,10 +11,10 @@ void main(void) {
   WDTCTL = WDTPW + WDTHOLD;        // Stop watchdog timer
 
   P1DIR |= BIT0;                   // Set P1.0 to output direction
-  P1OUT &= ~BIT0;                  // Set the red LED off
+  P1OUT &= ~BIT0;                  // Turn the red LED off
 
   P1DIR |= BIT6;                   // Set P1.6 to output direction
-  P1OUT &= ~BIT6;                  // Set the green LED off
+  P1OUT &= ~BIT6;                  // Turn the green LED off
 
   TA0CCR0 = 1000;                  // Timer period
   TA0CCTL0 = 0x10;                 // Enable Timer A0 interrupts
@@ -30,13 +30,14 @@ void main(void) {
 
 #pragma vector=TIMER1_A0_VECTOR    
 // interrupt service routine
-__interrupt void Timer1_A0 (void) {
+__interrupt void Timer1_A0 (void) 
+{
    P1OUT ^= BIT0;                  // Flash red LED
 }
 
 #pragma vector=TIMER0_A0_VECTOR    // Timer0 A0 interrupt service routine
 
-  __interrupt void Timer0_A0 (void) {
-
+  __interrupt void Timer0_A0 (void) 
+  {
    P1OUT ^= BIT6;                  // Flash green LED
 }
