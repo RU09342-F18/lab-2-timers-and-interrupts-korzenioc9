@@ -8,11 +8,11 @@ int main(void)
 
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
 
-    P1DIR = BIT0;   // sets P1.0 as an output
-    P1REN = BIT1;   // enables resistor at P1.1 (pull up)
-    P1OUT = BIT1;   // sets value of P1.1
-    P1IE |= BIT1;   // enables interrupt for when button is pressed
-    P1IFG &= ~BIT1; // clear interrupts
+    P1DIR = BIT0;   // set P1.0 direction as output
+    P1REN = BIT1;   // enable pull up resistor at P1.1
+    P1OUT = BIT1;   // initialize value of P1.1
+    P1IE |= BIT1;   // enable interrupt for P1.1 (button)
+    P1IFG &= ~BIT1; // clear P1.1 interrupt flags
 
     __enable_interrupt();
 }
@@ -22,6 +22,6 @@ int main(void)
 __interrupt void Port_1(void)
 
 {
-    P1OUT ^= BIT0;  // toggles LED
-    P1IFG &= ~BIT1; // interrupts toggle so button holds current state
+    P1OUT ^= BIT0;  // flashes LED
+    P1IFG &= ~BIT1; // clears P1.1 interrupt flags
 }
