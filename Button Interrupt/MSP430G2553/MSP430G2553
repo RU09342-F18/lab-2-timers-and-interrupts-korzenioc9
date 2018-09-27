@@ -5,20 +5,21 @@
  * 9/26/2018
  * main.c
  */
+ 
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // disable watchdog timer
     P1DIR = BIT0; // sets P1.0 as an output
-    P1REN = BIT3; // enables resistor at the button (pin P1.3)
+    P1REN = BIT3; // enables pull up resistor at the button (pin P1.3)
     P1OUT = BIT3; // initializes value of P1.3
-    P1IE |= BIT3;
-    P1IFG &= ~BIT3;
+    P1IE |= BIT3; // enable interrupt for P1.3
+    P1IFG &= ~BIT3; // interrupt flags at P1.3 cleared
     __enable_interrupt();
 }
 // interrupt service routine
 #pragma vector=PORT1_VECTOR
 __interrupt void Port_1(void)
 {
-    P1OUT ^= BIT0;
-    P1IFG &= ~BIT3;
+    P1OUT ^= BIT0; // flashes LED
+    P1IFG &= ~BIT3; // interrupt flags at P1.3 cleared
 }
