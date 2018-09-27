@@ -21,7 +21,7 @@ int main(void)
      CCTL0 = CCIE;                             // CCR0 interrupt enabled
      CCR0 =  100;                             // Sets frequency
 
-                             // Sets frequency
+                            
      TACTL = TASSEL_1 + MC_1 + ID_3;          // SMCLK selected, Continuous mode, enabled Divider = 8
 
 __enable_interrupt(); //enables interrupts
@@ -56,4 +56,23 @@ __interrupt void Port_1(void)
     P1IES |= BIT3;
     }
     P1IFG &= ~BIT3; //clear interrupt flags on P1.3
+}
+
+***
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+{
+    if (P1IES & BIT1)
+    {
+        TA0CTL = TACLR; // clear timer
+        TA0CTL = TASSEL_1 + MC_2 + ID_3;  // change timer to continuous mode
+        P1IES &= ~BIT1; // low to high edge trigger
+    }
+    else
+    {
+        TA0CCR0 = TA0R; // sets timer period to the value stored in CCR0
+        TA0CTL = TASSEL_1 + MC_1 + ID_3;  // change timer to continuous mode
+        P1IES |= BIT1; // high to low edge trigger
+    }
+        P1IFG &= ~BIT1; // clear P1.1 interrupt flags
 }
