@@ -1,4 +1,16 @@
 # TIMER A Blink
+
+For this portion of the lab I used boards MSP430G2553 and MSP430F5529.
+
+
+# MSP430G2553
+
+
+# MSP430F5529
+
+
+
+
 The TIMER peripherals can be used in many situations thanks to it flexibility in features. For this lab, you will be only scratching the surface as to what this peripheral can do. 
 
 ## Up, Down, Continuous 
