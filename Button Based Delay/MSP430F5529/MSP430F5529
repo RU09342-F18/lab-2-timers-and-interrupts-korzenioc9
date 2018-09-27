@@ -8,19 +8,19 @@ int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
 
-    P1DIR |= BIT0;                   // Set P1.0 to output direction
-    P4DIR |= BIT7;                   // Set P4.7 to output direction
+    P1DIR |= BIT0; // Set P1.0 to output direction
+    P4DIR |= BIT7; // Set P4.7 to output direction
     P1REN |= BIT1; // Sets Pin 1.1 to be pull up/down enabled
     P1OUT |= BIT1; // Sets Pin 1.1 to pull up resistor
-    P1OUT &= ~BIT0;                  // Set the red LED off
-    P4OUT &= ~BIT7;                  // Set the green LED off
-    P1IE |= BIT1; //  Enables interrupt on button
-    P1IES |= BIT1; // Enables high - to - low behavior on interrupt
+    P1OUT &= ~BIT0; // Turn 1.0 LED off
+    P4OUT &= ~BIT7; // Turn 4.7 LED off
+    P1IE |= BIT1; //  Enables interrupt on P1.1
+    P1IES |= BIT1; // Enables hi/lo behavior on interrupt
 
 
-    TA0CCR0 = 100;                 // count limit (16 bit)
+    TA0CCR0 = 100;                 // timer period
     TA0CCTL0 = CCIE;                 // enable Timer A0 interrupt
-    TA0CTL = TASSEL_1 + MC_1 + ID_3;        // timer A0 with ACLK, count up
+    TA0CTL = TASSEL_1 + MC_1 + ID_3;        // set count mode to up, select ACLK, divide by 8
 
 
 __enable_interrupt(); //enables interrupts
@@ -32,8 +32,8 @@ __enable_interrupt(); //enables interrupts
 #pragma vector = TIMER0_A0_VECTOR
     __interrupt void Timer0_A0 ()
     {
-        P1OUT ^= BIT0;
-        P4OUT ^= BIT7;
+        P1OUT ^= BIT0; //flash 1.0 LED
+        P4OUT ^= BIT7; //flash 4.7 LED
     }
 
 #pragma vector=PORT1_VECTOR
@@ -41,18 +41,15 @@ __interrupt void Port_1(void)
 {
     if (P1IES & BIT1)
     {
-        TA0CTL = TACLR; //clear timer
-        TA0CTL = TASSEL_1 + MC_2 + ID_3;  //change to continuous
-
-
-        P1IES &= ~BIT1;
+        TA0CTL = TACLR; // clear timer
+        TA0CTL = TASSEL_1 + MC_2 + ID_3;  // change timer to continuous mode
+        P1IES &= ~BIT1; // low to high edge trigger
     }
     else
     {
-
-    TA0CCR0 = TA0R;
-    TA0CTL = TASSEL_1 + MC_1 + ID_3;  //change to continuous
-    P1IES |= BIT1;
+        TA0CCR0 = TA0R; // sets timer period to the value stored in CCR0
+        TA0CTL = TASSEL_1 + MC_1 + ID_3;  // change timer to continuous mode
+        P1IES |= BIT1; // high to low edge trigger
     }
-    P1IFG &= ~BIT1;
+        P1IFG &= ~BIT1; // clear P1.1 interrupt flags
 }
