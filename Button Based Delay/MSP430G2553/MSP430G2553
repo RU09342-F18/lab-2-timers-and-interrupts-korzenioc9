@@ -12,7 +12,6 @@ int main(void)
     P1DIR |= BIT0; // Set P1.0 to output direction
     P1REN |= BIT3; // Enable pull up resistor on P1.3
     P1OUT |= BIT3; // Sets Pin 1.3 to pull up resistor
-    P1OUT |= 0X01; // Sets Pin 1.6 to be ON to begin
     P1OUT &= ~BIT0; // Turn 1.0 LED off
     P1IE |= BIT3; //  Enables interrupt on P1.3
     P1IES |= BIT3; // Enables hi/lo behavior on interrupt
