@@ -45,7 +45,7 @@ __interrupt void Port_1(void)
     else
     {
         TA0CCR0 = TA0R; // sets timer period to the value stored in TA0R
-        TA0CTL = TASSEL_1 + MC_1 + ID_3;  // change timer to continuous mode
+        TA0CTL = TASSEL_1 + MC_1 + ID_3;  // change timer to UP mode
         P1IES |= BIT1; // high to low edge trigger
     }
         P1IFG &= ~BIT1; // clear P1.1 interrupt flags
