@@ -21,7 +21,7 @@ int main(void)
      CCR0 =  100;                             // Sets frequency
 
                             
-     TACTL = TASSEL_1 + MC_1 + ID_3;          // SMCLK selected, Continuous mode, enabled Divider = 8
+     TACTL = TASSEL_1 + MC_1 + ID_3;          // SMCLK selected, UP mode, enabled Divider = 8
 
 __enable_interrupt(); //enables interrupts
     while (1)
@@ -51,7 +51,7 @@ __interrupt void Port_1(void)
     {
 
         CCR0 = TA0R; //set the clock frequency to the value stored in TA0R
-    TACTL = TASSEL_1 + MC_1 + ID_3;  //change timer to continuous mode
+    TACTL = TASSEL_1 + MC_1 + ID_3;  //change timer to UP mode
     P1IES |= BIT3; //high to low edge trigger
     }
     P1IFG &= ~BIT3; //clear interrupt flags on P1.3
